@@ -56,11 +56,13 @@ public class SpawnPoint : MonoBehaviour
     {
         if (endlessWave == true)
         {
+            waves.Clear();
             int enemyInWave = 3;
-            int currentWave = 1;
+            int currentWave = 0;
             while (true)
             {
-                Debug.Log("Wave: " + currentWave + " - Enemy: " + enemyInWave * 2);
+                currentWave += 1;
+                Debug.Log("Wave: " + currentWave + " - Enemy: " + enemyInWave);
                 for (int i = 0; i < enemyInWave; i++)
                 {
                     GameObject prefab = null;
@@ -102,7 +104,6 @@ public class SpawnPoint : MonoBehaviour
                 }
                 if (currentWave % 2 == 0)
                     enemyInWave += 1;
-                currentWave += 1;
             }
         }
         else
@@ -128,11 +129,23 @@ public class SpawnPoint : MonoBehaviour
                     GameObject newEnemy = Instantiate(prefab, transform.position, transform.rotation);
                     newEnemy.name = prefab.name;
                     DamageTaker dt = newEnemy.GetComponent<DamageTaker>();
-                    dt.hitpoints = prefab.GetComponent<DamageTaker>().hitpoints + (waveIdx * 2);
+                    if (waveIdx != 0 && waveIdx % 2 == 0)
+                    {
+                        dt.hitpoints = prefab.GetComponent<DamageTaker>().hitpoints + ((waveIdx - 1) * 2);
+                    }
+                    else if (waveIdx > 1 && waveIdx % 2 != 0)
+                    {
+                        dt.hitpoints = prefab.GetComponent<DamageTaker>().hitpoints + ((waveIdx - 2) * 2);
+                    }
+                    dt.currentHitpoints = dt.hitpoints;
                     // Set pathway
                     newEnemy.GetComponent<AiStatePatrol>().path = path;
                     NavAgent agent = newEnemy.GetComponent<NavAgent>();
                     // Set speed offset
+                    if (waveIdx % 10 == 0)
+                    {
+                        speed += 0.05f;
+                    }
                     agent.speed = Random.Range(agent.speed * (1f - speed), agent.speed * (1f + speed));
                     // Add enemy to list
                     activeEnemies.Add(newEnemy);
