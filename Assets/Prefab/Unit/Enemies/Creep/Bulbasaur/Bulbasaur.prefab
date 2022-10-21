@@ -375,7 +375,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7de7b56c2769e414fa31381aaa4c4eb4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hitpoints: 9
+  hitpoints: 2
   currentHitpoints: 0
   damageDisplayTime: 0.4
   healthBar: {fileID: 7684050507494629941}
